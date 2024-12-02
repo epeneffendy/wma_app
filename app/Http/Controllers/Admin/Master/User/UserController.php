@@ -9,8 +9,9 @@ use App\Services\UserService;
 
 class UserController extends Controller
 {
-    public function index(){
-        return view('admin.master.users.index');
+    public function index(UserService $userService){
+        $data = $userService->get();
+        return view('admin.master.users.index',['data'=>$data]);
     }
 
     public function add(Request $request)
