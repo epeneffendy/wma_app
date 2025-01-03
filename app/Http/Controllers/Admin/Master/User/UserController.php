@@ -9,9 +9,10 @@ use App\Services\UserService;
 
 class UserController extends Controller
 {
-    public function index(UserService $userService){
+    public function index(UserService $userService)
+    {
         $data = $userService->get();
-        return view('admin.master.users.index',['data'=>$data]);
+        return view('admin.master.users.index', ['data' => $data]);
     }
 
     public function add(Request $request)
@@ -20,7 +21,8 @@ class UserController extends Controller
         return view('admin.master.users.add', compact('editable'));
     }
 
-    public function store(UserRequest $userRequest, UserService $userService){
+    public function store(UserRequest $userRequest, UserService $userService)
+    {
         try {
             $input = $userRequest->validated();
             $store = $userService->insert($input);
@@ -29,8 +31,22 @@ class UserController extends Controller
             dd($th);
             $request->session()->flash('status', 'Gagal Simpan!');
             return back()->withInput();
-        }catch(\Exception  $e){
-            dd($e); die();
+        } catch (\Exception  $e) {
+            dd($e);
+            die();
         }
+    }
+
+    public function edit($id, UserService $userService)
+    {
+        $editable = true;
+        $data = $userService->findById($id);
+        return view('admin.master.users.add', compact('data','editable'));
+    }
+
+    public function delete($id, UserService $userService)
+    {
+        $deleted = $userService->delete($id);
+        return redirect()->route('admin.master.users.index');
     }
 }
