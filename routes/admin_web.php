@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Master\User\UserController;
+use App\Http\Controllers\Admin\Transaction\ProductsTransactionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,6 +26,16 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::post('/store', [UserController::class, 'store'])->name('store');
                 Route::get('/delete/{id}', [UserController::class, 'delete'])->name('delete');
                 Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+            });
+
+        });
+
+        Route::group(['prefix' => 'transaction', 'as' => 'transaction.', 'namespace' => 'Transaction'], function () {
+            Route::prefix('products_transaction')->namespace('Product Transaction')->name('products_transaction.')->group(function () {
+                Route::get('/', [ProductsTransactionController::class, 'index'])->name('index');
+                Route::get('/add', [ProductsTransactionController::class, 'add'])->name('add');
+                Route::post('/store', [ProductsTransactionController::class, 'store'])->name('store');
+                Route::get('/edit/{id}', [ProductsTransactionController::class, 'edit'])->name('edit');
             });
 
         });

@@ -24,16 +24,21 @@ class UserController extends Controller
     public function store(UserRequest $userRequest, UserService $userService)
     {
         try {
+            $message = '';
             $input = $userRequest->validated();
-            $store = $userService->insert($input);
-            return redirect()->route('admin.master.users.index');
+            if ($userRequest->editable == 'false'){
+                $store = $userService->insert($input);
+                $message = 'Data Berhasil Disimpan!';
+            }else{
+                $store = $userService->update($input);
+                $message = 'Data Berhasil Diupdate!';
+            }
+
+            return redirect()->route('admin.master.users.index')->with('message', $message);
         } catch (\Throwable $th) {
-            dd($th);
-            $request->session()->flash('status', 'Gagal Simpan!');
-            return back()->withInput();
+            return back()->with('errors', $th->getMessage());
         } catch (\Exception  $e) {
-            dd($e);
-            die();
+            return back()->with('errors', $e->getMessage());
         }
     }
 
@@ -47,6 +52,6 @@ class UserController extends Controller
     public function delete($id, UserService $userService)
     {
         $deleted = $userService->delete($id);
-        return redirect()->route('admin.master.users.index');
+        return redirect()->route('admin.master.users.index')->with('message','Data Berhasil dihapus!');
     }
 }

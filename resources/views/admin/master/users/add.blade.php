@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <div class="row gy-4">
         <div class="row">
             <div class="col-md-12">
@@ -27,6 +26,11 @@
                     <div class="card-body pt-2 mt-1">
                         <form action="{{route('admin.master.users.store')}}" method="post">
                             @csrf
+                            @if (session('errors'))
+                                <div class="alert alert-danger">
+                                    {{session('errors')}}
+                                </div>
+                            @endif
                             <div class="row mt-2 gy-4">
                                 <div class="col-md-6">
                                     <div class="form-floating form-floating-outline">

@@ -11,9 +11,9 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">List User</h5>
-                        <a href="{{route('admin.master.users.add')}}" class="btn btn-primary"><span
-                                class="tf-icons mdi mdi-account-plus-outline me-1"></span>Add User</a>
+                        <h5 class="card-title m-0 me-2">List Transaction</h5>
+                        <a href="{{route('admin.transaction.products_transaction.add')}}" class="btn btn-primary"><span
+                                class="tf-icons mdi mdi mdi-swap-horizontal-bold me-1"></span>Add Transaction</a>
                     </div>
                     <div class="card-body">
                         @if (session('message'))
@@ -31,24 +31,17 @@
                             <table class="table">
                                 <thead class="table-light">
                                 <tr>
-                                    <th class="text-truncate">Nama</th>
-                                    <th class="text-truncate">Email</th>
+                                    <th class="text-truncate">Product</th>
+                                    <th class="text-truncate">Unit</th>
+                                    <th class="text-truncate">Category</th>
+                                    <th class="text-truncate">Date</th>
+                                    <th class="text-truncate">Qty</th>
+                                    <th class="text-truncate">Type</th>
                                     <th class="text-truncate">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($data as $item)
-                                    <tr>
-                                        <td>{{$item->name}}</td>
-                                        <td>{{$item->email}}</td>
-                                        <td>
-                                            <a href="{{route('admin.master.users.edit', ['id'=>$item->id])}}"
-                                               class="btn btn-warning"><i class="mdi mdi-file-edit-outline"></i></a>
-                                            <a href="{{route('admin.master.users.delete', ['id'=>$item->id])}}"
-                                               class="btn btn-danger"><i class="mdi mdi-trash-can-outline"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+
                                 </tbody>
                             </table>
                         </div>

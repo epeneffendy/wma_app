@@ -22,6 +22,13 @@ class UserService{
         return $data;
     }
 
+    public function update($payload){
+        $payload['updated_at'] = date('Y-m-d H:i:s');
+        $payload['password'] = Hash::make($payload['password']);
+        $data = User::where(['email'=>$payload['email']])->update($payload);
+        return $data;
+    }
+
     public function delete($id){
         $data = User::destroy($id);
     }
