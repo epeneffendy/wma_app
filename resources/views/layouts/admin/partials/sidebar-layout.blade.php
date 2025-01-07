@@ -189,8 +189,13 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('admin.transaction.products_transaction.index') }}" class="menu-link">
-                        <div data-i18n="Transaksi Product">Transaksi Product</div>
+                    <a href="{{ route('admin.transaction.products_transaction.acceptance') }}" class="menu-link">
+                        <div data-i18n="Acceptance">Acceptance Product</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('admin.transaction.products_transaction.transaction') }}" class="menu-link">
+                        <div data-i18n="Transaction Acceptance">Transaction Product</div>
                     </a>
                 </li>
             </ul>

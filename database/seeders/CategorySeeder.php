@@ -15,12 +15,14 @@ class CategorySeeder extends Seeder
     {
         $category = [
             [
-                'name' => 'Snack',
+                'code'=>'001',
+                'name' => 'Soes',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Minuman',
+                'code'=>'002',
+                'name' => 'Pastry',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],

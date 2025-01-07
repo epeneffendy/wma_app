@@ -12,7 +12,7 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title m-0 me-2">List Transaction</h5>
-                        <a href="{{route('admin.transaction.products_transaction.add')}}" class="btn btn-primary"><span
+                        <a href="{{route('admin.transaction.products_transaction.add_transaction')}}" class="btn btn-primary"><span
                                 class="tf-icons mdi mdi mdi-swap-horizontal-bold me-1"></span>Add Transaction</a>
                     </div>
                     <div class="card-body">
@@ -37,11 +37,19 @@
                                     <th class="text-truncate">Date</th>
                                     <th class="text-truncate">Qty</th>
                                     <th class="text-truncate">Type</th>
-                                    <th class="text-truncate">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                @foreach($data as $item)
+                                    <tr>
+                                        <td>{{$item->product->code .' - '. $item->product->name}}</td>
+                                        <td>{{$item->unit_code}}</td>
+                                        <td>{{$item->category->name}}</td>
+                                        <td>{{$item->transaction_date}}</td>
+                                        <td>{{$item->qty}}</td>
+                                        <td>{{$item->transaction_type}}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

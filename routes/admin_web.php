@@ -32,8 +32,10 @@ Route::prefix('administrator')->name('admin.')->group(function () {
 
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.', 'namespace' => 'Transaction'], function () {
             Route::prefix('products_transaction')->namespace('Product Transaction')->name('products_transaction.')->group(function () {
-                Route::get('/', [ProductsTransactionController::class, 'index'])->name('index');
-                Route::get('/add', [ProductsTransactionController::class, 'add'])->name('add');
+                Route::get('/acceptance', [ProductsTransactionController::class, 'acceptance'])->name('acceptance');
+                Route::get('/transaction', [ProductsTransactionController::class, 'transaction'])->name('transaction');
+                Route::get('/acceptance/add', [ProductsTransactionController::class, 'add_acceptance'])->name('add_acceptance');
+                Route::get('/transaction/add', [ProductsTransactionController::class, 'add_transaction'])->name('add_transaction');
                 Route::post('/store', [ProductsTransactionController::class, 'store'])->name('store');
                 Route::get('/edit/{id}', [ProductsTransactionController::class, 'edit'])->name('edit');
             });

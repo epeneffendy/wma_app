@@ -23,50 +23,53 @@
                                    value="{{($editable) ? 'true' : 'false'}}" placeholder="Name"/>
 
                             <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="product_code">Product</label>
+                                <div class="col-sm-6">
+                                    <select class="form-select" id="product_code" name="product_code" aria-label="Product">
+                                        <option value="0">-- Select Product --</option>
+                                        @foreach($list_products as $item)
+                                            <option value="{{$item->code}}">{{$item->code .' - '.$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label" for="product_id">Product</label>
                                 <div class="col-sm-6">
-                                    <select class="form-select" id="product_id" name="product_id" aria-label="Product">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                    <select class="form-select" id="transaction_select" name="transaction_select" aria-label="Transaction Type" disabled>
+                                        <option value="in" {{($transaction_type == 'in') ? 'selected' : ''}}>Acceptance</option>
+                                        <option value="out" {{($transaction_type == 'out') ? 'selected' : ''}}>Transaction</option>
                                     </select>
+
+                                    <input class="form-control"  type="hidden" id="transaction_type" name="transaction_type" value="{{$transaction_type}}"/>
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label" for="unit_id">Unit Product</label>
-                                <div class="col-sm-6">
-                                    <select class="form-select" id="unit_id" name="unit_id" aria-label="Unit">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label" for="category_id">Category Product</label>
-                                <div class="col-sm-6">
-                                    <select class="form-select" id="category_id" name="category_id" aria-label="Category">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label" for="basic-default-company">Transaction Date</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control"  type="text" id="transaction_date" name="transaction_date" value="{{date('d/m/Y')}}" disabled/>
+                                    <input class="form-control"  type="text" id="transaction_date" name="transaction_date" value="{{date('d-m-Y')}}" disabled/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="basic-default-company">Transaction Date</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control" type="number" id="qty" name="qty" value="" placeholder="QTY"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="basic-default-company">Description</label>
+                                <div class="col-sm-6">
+                                    <textarea class="form-control" type="text" id="description" name="description"></textarea>
                                 </div>
                             </div>
 
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-primary me-2"><span
-                                        class="tf-icons mdi mdi-content-save-check me-1"></span>Save User
+                                        class="tf-icons mdi mdi-content-save-check me-1"></span>Save Transaction
                                 </button>
                             </div>
                         </form>
