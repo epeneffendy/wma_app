@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Master\User\UserController;
 use App\Http\Controllers\Admin\Transaction\ProductsTransactionController;
+use App\Http\Controllers\Admin\Warehouse\WarehouseTransactionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,7 +40,13 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::post('/store', [ProductsTransactionController::class, 'store'])->name('store');
                 Route::get('/edit/{id}', [ProductsTransactionController::class, 'edit'])->name('edit');
             });
+        });
 
+        Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.', 'namespace' => 'Warehouse'], function () {
+            Route::prefix('warehouse_transaction')->namespace('Warehouse Transaction')->name('warehouse_transaction.')->group(function () {
+                Route::get('/', [WarehouseTransactionController::class,'index'])->name('index');
+                Route::get('/get_product_by_category/{code}', [WarehouseTransactionController::class,'getProductByCategory'])->name('get_product_by_category');
+            });
         });
     });
 });

@@ -29,3 +29,5 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 
 <link href="{{ asset('admin/assets/js/datatables.min.js') }}" rel="stylesheet">
+
+<script src="{{asset('admin/assets/js/plugin/sweet-alert/sweet-alert.min.js')}}"></script>

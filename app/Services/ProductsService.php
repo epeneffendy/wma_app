@@ -18,4 +18,9 @@ class ProductsService
         $data = Products::where(['code'=>$code,'status' => 1])->first();
         return $data;
     }
+
+    public function findByCategory($code){
+        $data = Products::where(['category_code'=>$code, 'status'=>1])->get();
+        return $data;
+    }
 }

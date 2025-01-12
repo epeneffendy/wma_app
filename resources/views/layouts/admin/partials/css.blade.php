@@ -16,4 +16,7 @@
 
 <link rel="stylesheet" href="{{ asset('admin/assets/vendor/fonts/materialdesignicons.css') }}" />
 
+<link rel="stylesheet" href="{{ asset('admin/assets/css/plugin/sweet-alert/sweet-alert.css') }}" />
+
+
 <!-- Page CSS -->

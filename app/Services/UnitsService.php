@@ -8,7 +8,7 @@ class UnitsService
 {
     public function get($request = null)
     {
-        $data = Units::where(['status' => 1]);
+        $data = Units::where(['status' => 1])->get();
         return $data;
     }
 }

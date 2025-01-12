@@ -21,6 +21,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
         rel="stylesheet" />
         @includeIf('layouts.admin.partials.css')
+        @yield('styles')
     </head>
 
 <body>
@@ -93,6 +94,8 @@
         </div>
     </div>
     @includeIf('layouts.admin.partials.js')
+    @yield('scripts')
 </body>
+
 
 

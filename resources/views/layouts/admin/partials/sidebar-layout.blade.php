@@ -208,7 +208,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('admin.master.users.index') }}" class="menu-link">
+                    <a href="{{ route('admin.warehouse.warehouse_transaction.index') }}" class="menu-link">
                         <div data-i18n="Stok Product">Stok Product</div>
                     </a>
                 </li>
