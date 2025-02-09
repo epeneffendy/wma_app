@@ -46,6 +46,10 @@ Route::prefix('administrator')->name('admin.')->group(function () {
             Route::prefix('warehouse_transaction')->namespace('Warehouse Transaction')->name('warehouse_transaction.')->group(function () {
                 Route::get('/', [WarehouseTransactionController::class,'index'])->name('index');
                 Route::get('/get_product_by_category/{code}', [WarehouseTransactionController::class,'getProductByCategory'])->name('get_product_by_category');
+                Route::post('/find_stock_product', [WarehouseTransactionController::class,'findStockProduct'])->name('find_stock_product');
+                Route::post('/show_transaction_stock', [WarehouseTransactionController::class,'showTransactionStock'])->name('show_transaction_stock');
+                Route::post('/get_detail_transaction_product', [WarehouseTransactionController::class,'getDetailTransactionProduct'])->name('get_detail_transaction_product');
+                Route::post('/show_detail_transaction_product', [WarehouseTransactionController::class,'showDetailTransactionProduct'])->name('show_detail_transaction_product');
             });
         });
     });
