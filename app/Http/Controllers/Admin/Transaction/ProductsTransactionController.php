@@ -57,6 +57,8 @@ class ProductsTransactionController extends Controller
             if (isset($product)) {
                 $input['unit_code'] = $product->unit_code;
                 $input['category_code'] = $product->category_code;
+                $input['price'] = $product->price;
+                $input['total_price'] = $product->price * $input['qty'];
             }
             $transaction_id = $productsTransactionService->insert($input);
             if ($transaction_id) {

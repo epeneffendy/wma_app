@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use App\Http\Controllers\Admin\Master\User\UserController;
 use App\Http\Controllers\Admin\Transaction\ProductsTransactionController;
 use App\Http\Controllers\Admin\Warehouse\WarehouseTransactionController;
+use App\Http\Controllers\Admin\Wma\WeightedMovingAverageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,6 +51,14 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::post('/show_transaction_stock', [WarehouseTransactionController::class,'showTransactionStock'])->name('show_transaction_stock');
                 Route::post('/get_detail_transaction_product', [WarehouseTransactionController::class,'getDetailTransactionProduct'])->name('get_detail_transaction_product');
                 Route::post('/show_detail_transaction_product', [WarehouseTransactionController::class,'showDetailTransactionProduct'])->name('show_detail_transaction_product');
+            });
+        });
+
+        Route::group(['prefix' => 'wma', 'as' => 'wma.', 'namespace' => 'Wma'], function () {
+            Route::prefix('weighted_moving_average')->namespace('Weighted Moving Average')->name('weighted_moving_average.')->group(function () {
+                Route::get('/', [WeightedMovingAverageController::class,'index'])->name('index');
+                Route::post('/calculate_wma', [WeightedMovingAverageController::class,'calculateWma'])->name('calculate_wma');
+
             });
         });
     });

@@ -171,6 +171,19 @@
                 </li>
             </ul>
         </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons mdi mdi-cart-arrow-right"></i>
+                <div data-i18n="Manajemen Stok">WMA</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('admin.wma.weighted_moving_average.index') }}" class="menu-link">
+                        <div data-i18n="Stok Product">Weighted Moving Average</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
     </ul>

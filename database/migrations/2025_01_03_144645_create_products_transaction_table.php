@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('transaction_date');
             $table->string('transaction_type');
             $table->decimal('qty');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
