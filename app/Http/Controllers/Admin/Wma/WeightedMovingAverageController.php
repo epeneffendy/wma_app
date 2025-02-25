@@ -20,9 +20,15 @@ class WeightedMovingAverageController extends Controller
         return view('admin.weighted_moving_average.index', ['periode' => $periode, 'year' => $year]);
     }
 
-    public function calculateWma(Request $request, WeightedMovingAverageService $weightedMovingAverageService){
+    public function calculateWma(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
+    {
         $total_month = $request->total_month;
         $count_periode = $weightedMovingAverageService->countPeriode($request->all());
-        return view('admin.weighted_moving_average.partial.show_calculate_wma', ['total_month' => $total_month]);
+        $search_actual = $weightedMovingAverageService->searchActual($count_periode);
+        return view('admin.weighted_moving_average.partial.show_calculate_wma', [
+            'total_month' => $total_month,
+            'count_periode' => $count_periode,
+            'actual'=>$search_actual
+        ]);
     }
 }
