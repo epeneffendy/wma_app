@@ -67,7 +67,30 @@
             $('#fetch_wma').click(function () {
                 validationCalculateWma();
             });
+
+            $(document).on("click","#count_wma",function() {
+                countWma();
+            });
         });
+
+        function countWma(){
+            var $form = $("#show_data_actual");
+            var data = getFormData($form);
+            $.ajax({
+                type : 'POST',
+                url : base_prefix + '/weighted_moving_average/count_wma',
+                data : {
+                    "_token": "{{ csrf_token() }}",
+                    'form' : data,
+                    'count': $('#count').val(),
+                    'periode':$('#periode').val(),
+                    'year':$('#year').val(),
+                    'total_month':$('#total_month').val()
+                }
+            })
+
+            console.log(result)
+        }
 
         function validationCalculateWma() {
             let success = true;
@@ -119,6 +142,18 @@
 
                 }
             );
+        }
+
+
+        function getFormData($form){
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+
+            $.map(unindexed_array, function(n, i){
+                indexed_array[n['name']] = n['value'];
+            });
+
+            return indexed_array;
         }
 
     </script>

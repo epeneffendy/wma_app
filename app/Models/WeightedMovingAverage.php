@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class WeightedMovingAverage extends Model
 {
     use HasFactory;
+    protected $table = 'weighted_moving_average';
 }
