@@ -56,8 +56,9 @@ class WeightedMovingAverageController extends Controller
 
             $prosesWma = $weightedMovingAverageService->prosesWma($arr_data, $arr_filter);
             if ($prosesWma['success']) {
+
                 DB::commit();
-                return redirect()->route('admin.weighted_moving_average.list')->with('message', 'Proses Moving Weighted Average Success');
+                return ['success'=>$prosesWma['success'],'message'=>$prosesWma['message']];
             } else {
                 dd("failed");
                 DB::rollBack();
