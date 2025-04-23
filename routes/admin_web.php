@@ -59,6 +59,8 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::get('/', [WeightedMovingAverageController::class,'index'])->name('index');
                 Route::post('/calculate_wma', [WeightedMovingAverageController::class,'calculateWma'])->name('calculate_wma');
                 Route::post('/count_wma', [WeightedMovingAverageController::class,'countWma'])->name('count_wma');
+                Route::get('/list', [WeightedMovingAverageController::class,'list'])->name('list');
+                Route::get('/details/{id}', [WeightedMovingAverageController::class,'details'])->name('details');
 
             });
         });

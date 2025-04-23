@@ -55,10 +55,10 @@ class WeightedMovingAverageController extends Controller
             }
 
             $prosesWma = $weightedMovingAverageService->prosesWma($arr_data, $arr_filter);
-            if ($prosesWma['success']){
+            if ($prosesWma['success']) {
                 DB::commit();
-                dd("okee");
-            }else{
+                return redirect()->route('admin.weighted_moving_average.list')->with('message', 'Proses Moving Weighted Average Success');
+            } else {
                 dd("failed");
                 DB::rollBack();
             }
@@ -71,6 +71,17 @@ class WeightedMovingAverageController extends Controller
             DB::rollBack();
             return back()->with('errors', $e->getMessage());
         }
+    }
 
+    public function list(WeightedMovingAverageService $weightedMovingAverageService)
+    {
+        $data = $weightedMovingAverageService->get();
+        return view('admin.weighted_moving_average.list', ['data' => $data]);
+    }
+
+    public function details(Request $request, WeightedMovingAverageService $weightedMovingAverageService){
+        $data = $weightedMovingAverageService->getById($request->id);
+        $details = $weightedMovingAverageService->getDetails($request->id);
+        return view('admin.weighted_moving_average.details', ['data' => $data,'details'=>$details]);
     }
 }

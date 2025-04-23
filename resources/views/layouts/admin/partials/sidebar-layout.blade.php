@@ -182,6 +182,11 @@
                         <div data-i18n="Stok Product">Weighted Moving Average</div>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="{{ route('admin.wma.weighted_moving_average.list') }}" class="menu-link">
+                        <div data-i18n="Stok Product">List WMA</div>
+                    </a>
+                </li>
             </ul>
         </li>
 

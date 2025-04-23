@@ -43,7 +43,6 @@ class ProductsTransactionController extends Controller
         $list_products = $productsService->get();
 
         return view('admin.transaction.products_transaction.add', compact('editable', 'transaction_type', 'list_products'));
-        return view('admin.transaction.products_transaction.add', compact('editable', 'transaction_type'));
     }
 
     public function store(Request $request, ProductsTransactionRequest $productsTransactionRequest, ProductsTransactionService $productsTransactionService, ProductsService $productsService, WarehouseTransactionService $warehouseTransactionService)

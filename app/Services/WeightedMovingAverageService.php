@@ -148,4 +148,19 @@ class WeightedMovingAverageService
 
         return $periode;
     }
+
+    public function get(){
+        $data = WeightedMovingAverage::get();
+        return $data;
+    }
+
+    public function getDetails($id){
+        $data = WeightedMovingAverageDetail::where(['weighted_moving_average_id'=>$id])->get();
+        return $data;
+    }
+
+    public function getById($id){
+        $data = WeightedMovingAverage::where(['id'=>$id])->first();
+        return $data;
+    }
 }
