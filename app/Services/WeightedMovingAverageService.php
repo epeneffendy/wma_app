@@ -163,4 +163,9 @@ class WeightedMovingAverageService
         $data = WeightedMovingAverage::where(['id'=>$id])->first();
         return $data;
     }
+
+    public function getByMonth($month){
+        $data = WeightedMovingAverage::where(DB::raw('DATE_FORMAT(updated_at,"%Y-%m")'), '=', $month)->get();
+        return $data;
+    }
 }

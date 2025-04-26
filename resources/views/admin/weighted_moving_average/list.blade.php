@@ -39,7 +39,7 @@
                                 <tbody>
                                 @foreach($data as $item)
                                     <tr>
-                                        <td>{{$item->periode}}</td>
+                                        <td>{{\App\Models\WeightedMovingAverage::periode($item['periode'])}}</td>
                                         <td>{{$item->year}}</td>
                                         <td>{{$item->actual_wma}}</td>
                                         <td>{{$item->weighted_average}}</td>

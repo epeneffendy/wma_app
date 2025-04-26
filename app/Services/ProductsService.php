@@ -23,4 +23,5 @@ class ProductsService
         $data = Products::where(['category_code'=>$code, 'status'=>1])->get();
         return $data;
     }
+
 }
