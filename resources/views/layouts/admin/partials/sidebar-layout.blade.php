@@ -178,7 +178,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('admin.wma.weighted_moving_average.index') }}" class="menu-link">
+                    <a href="{{ route('admin.wma.weighted_moving_average.index_new') }}" class="menu-link">
                         <div data-i18n="Stok Product">Weighted Moving Average</div>
                     </a>
                 </li>

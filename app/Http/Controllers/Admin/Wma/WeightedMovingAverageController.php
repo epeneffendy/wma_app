@@ -21,6 +21,17 @@ class WeightedMovingAverageController extends Controller
         return view('admin.weighted_moving_average.index', ['periode' => $periode, 'year' => $year]);
     }
 
+    public function index_new(WeightedMovingAverageService $weightedMovingAverageService)
+    {
+        $periode = $weightedMovingAverageService->periode();
+        $year_now = date('Y');
+        $year = [];
+        for ($i = 3; $i >= 0; --$i) {
+            $year[$i] = $year_now - $i;
+        }
+        return view('admin.weighted_moving_average.index_new', ['periode' => $periode, 'year' => $year]);
+    }
+
     public function calculateWma(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
     {
         $total_month = $request->total_month;
@@ -84,5 +95,16 @@ class WeightedMovingAverageController extends Controller
         $data = $weightedMovingAverageService->getById($request->id);
         $details = $weightedMovingAverageService->getDetails($request->id);
         return view('admin.weighted_moving_average.details', ['data' => $data,'details'=>$details]);
+    }
+
+    public function calculateWmaNew(Request $request, WeightedMovingAverageService $weightedMovingAverageService){
+        $date_periode = $request->date_periode;
+        $total_days = $request->total_days;
+        $count_days= $weightedMovingAverageService->countDays($request->all());
+        $search_actual = $weightedMovingAverageService->searchActualStock($date_periode, $total_days, $count_days);
+        return view('admin.weighted_moving_average.partial.show_calculate_wma_new', [
+            'total_days' => $count_days,
+            'actual'=>$search_actual
+        ]);
     }
 }

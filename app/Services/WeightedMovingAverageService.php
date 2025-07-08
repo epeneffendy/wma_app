@@ -100,7 +100,7 @@ class WeightedMovingAverageService
         if ($success) {
 
             $updateActual = $this->updateTotalActual($wma_id, $actual, $total_weight);
-            if (!$updateActual){
+            if (!$updateActual) {
                 $success = false;
                 $message = 'Update Actual failed!';
             }
@@ -149,23 +149,70 @@ class WeightedMovingAverageService
         return $periode;
     }
 
-    public function get(){
+    public function get()
+    {
         $data = WeightedMovingAverage::get();
         return $data;
     }
 
-    public function getDetails($id){
-        $data = WeightedMovingAverageDetail::where(['weighted_moving_average_id'=>$id])->get();
+    public function getDetails($id)
+    {
+        $data = WeightedMovingAverageDetail::where(['weighted_moving_average_id' => $id])->get();
         return $data;
     }
 
-    public function getById($id){
-        $data = WeightedMovingAverage::where(['id'=>$id])->first();
+    public function getById($id)
+    {
+        $data = WeightedMovingAverage::where(['id' => $id])->first();
         return $data;
     }
 
-    public function getByMonth($month){
+    public function getByMonth($month)
+    {
         $data = WeightedMovingAverage::where(DB::raw('DATE_FORMAT(updated_at,"%Y-%m")'), '=', $month)->get();
         return $data;
+    }
+
+    public function countDays($params)
+    {
+        $total_days = (int)$params['total_days'];
+
+        $arr_weight = [];
+        $total_item_weight = 0;
+        if ($params['total_days'] > 1) {
+            for ($i = 0; $i < $total_days; $i++) {
+                if ($total_item_weight == 0) {
+                    for ($x = 0; $x < ($total_days - $i); $x++) {
+                        $total_item_weight += ($total_days - $i) - $x;
+                    }
+                }
+                $arr_weight[$i] = ($total_days - $i) / $total_item_weight;
+            }
+        }
+        return $arr_weight;
+    }
+
+    public function searchActualStock($date_periode, $total_days, $count_days)
+    {
+
+        $arr_date = [];
+        $new_date = '';
+        for ($i = 1; $i <= $total_days; $i++) {
+            $new_date = date('Y-m-d', strtotime('-' . $total_days - $i . ' days', strtotime($date_periode)));
+            $arr_date[$new_date] = $new_date;
+            $arr_date[$new_date] = $count_days[$i - 1];
+        }
+dd(ksort($count_days));
+        $actual = [];
+        foreach ($arr_date as $ind => $item) {
+            $data_actual = DB::table('products_transaction')
+                ->select(DB::raw('sum(qty) as total_qty'))
+                ->where(['transaction_type' => 'out'])
+                ->where(DB::raw('DATE_FORMAT(transaction_date,"%Y-%m-%d")'), '=', $item)->first();
+
+            $actual[$ind]['date'] = $arr_date[$item];
+            $actual[$ind]['actual'] = ($data_actual->total_qty != null) ? $data_actual->total_qty : 0;
+        }
+        return $actual;
     }
 }
