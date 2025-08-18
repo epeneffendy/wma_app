@@ -9,7 +9,6 @@
 {{--                <input class="form-control" type="hidden" value="{{$count}}" id="count"--}}
 {{--                       name="count" readonly/>--}}
                 <form id="show_data_actual">
-
                     @foreach($actual as $ind => $item)
                         <div class="row mb-3">
                             <div class="col-sm-3">
@@ -24,10 +23,10 @@
                                        name="actual_{{$ind}}" readonly/>
                             </div>
 
-{{--                            <div class="col-sm-3">--}}
-{{--                                <label class="col-sm-12 col-form-label" for="total_month">Weight</label>--}}
-{{--                                <input class="form-control" type="number" id="weight" name="weight_{{$ind}}"/>--}}
-{{--                            </div>--}}
+                            <div class="col-sm-3">
+                                <label class="col-sm-12 col-form-label" for="total_month">Weight</label>
+                                <input class="form-control" type="text" id="weight" name="weight_{{$ind}}" value="{{$item['weight']}}" id="weight" readonly/>
+                            </div>
                         </div>
                     @endforeach
                     <div class="mt-4">

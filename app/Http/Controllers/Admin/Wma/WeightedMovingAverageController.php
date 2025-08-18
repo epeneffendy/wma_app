@@ -85,6 +85,46 @@ class WeightedMovingAverageController extends Controller
         }
     }
 
+    public function newCountWma(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
+    {
+        DB::beginTransaction();
+
+        try {
+            $arr_filter = [
+                'total_days' => $request->total_days,
+                'date_periode' => $request->date_periode
+            ];
+
+            $form = $request->all()['form'];
+
+            $arr_data = [];
+            for ($i = 0; $i < $request->count; $i++) {
+                $arr_data[$i]['year'] = $form['year_' . $i];
+                $arr_data[$i]['periode'] = $form['periode_' . $i];
+                $arr_data[$i]['actual'] = $form['actual_' . $i];
+                $arr_data[$i]['weight'] = $form['weight_' . $i];
+            }
+
+            $prosesWma = $weightedMovingAverageService->prosesWma($arr_data, $arr_filter);
+            if ($prosesWma['success']) {
+
+                DB::commit();
+                return ['success'=>$prosesWma['success'],'message'=>$prosesWma['message']];
+            } else {
+                dd("failed");
+                DB::rollBack();
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollBack();
+            return back()->with('errors', $th->getMessage());
+        } catch (\Exception  $e) {
+            dd($e);
+            DB::rollBack();
+            return back()->with('errors', $e->getMessage());
+        }
+    }
+
     public function list(WeightedMovingAverageService $weightedMovingAverageService)
     {
         $data = $weightedMovingAverageService->get();
@@ -102,6 +142,7 @@ class WeightedMovingAverageController extends Controller
         $total_days = $request->total_days;
         $count_days= $weightedMovingAverageService->countDays($request->all());
         $search_actual = $weightedMovingAverageService->searchActualStock($date_periode, $total_days, $count_days);
+
         return view('admin.weighted_moving_average.partial.show_calculate_wma_new', [
             'total_days' => $count_days,
             'actual'=>$search_actual

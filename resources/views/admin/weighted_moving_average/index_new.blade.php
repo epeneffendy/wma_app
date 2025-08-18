@@ -62,17 +62,15 @@
             var data = getFormData($form);
             $.ajax({
                 type: 'POST',
-                url: base_prefix + '/weighted_moving_average/count_wma',
+                url: base_prefix + '/weighted_moving_average/new_count_wma',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'form': data,
-                    'count': $('#count').val(),
-                    'periode': $('#periode').val(),
-                    'year': $('#year').val(),
-                    'total_month': $('#total_month').val()
+                    'date_periode': $('#date_periode').val(),
+                    'total_days': $('#total_days').val()
                 }
             })
-            redirect();
+            // redirect();
         }
 
         function redirect() {

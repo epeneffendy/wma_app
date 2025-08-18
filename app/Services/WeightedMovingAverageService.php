@@ -186,9 +186,10 @@ class WeightedMovingAverageService
                         $total_item_weight += ($total_days - $i) - $x;
                     }
                 }
-                $arr_weight[$i] = ($total_days - $i) / $total_item_weight;
+                $arr_weight[$i] =  sprintf("%.3f", (($total_days - $i) / $total_item_weight)) ;
             }
         }
+
         return $arr_weight;
     }
 
@@ -197,13 +198,16 @@ class WeightedMovingAverageService
 
         $arr_date = [];
         $new_date = '';
+
         for ($i = 1; $i <= $total_days; $i++) {
             $new_date = date('Y-m-d', strtotime('-' . $total_days - $i . ' days', strtotime($date_periode)));
             $arr_date[$new_date] = $new_date;
-            $arr_date[$new_date] = $count_days[$i - 1];
         }
-dd(ksort($count_days));
+
+        $sort_array = $this->sortArray($count_days);
+
         $actual = [];
+        $count = 0;
         foreach ($arr_date as $ind => $item) {
             $data_actual = DB::table('products_transaction')
                 ->select(DB::raw('sum(qty) as total_qty'))
@@ -212,7 +216,23 @@ dd(ksort($count_days));
 
             $actual[$ind]['date'] = $arr_date[$item];
             $actual[$ind]['actual'] = ($data_actual->total_qty != null) ? $data_actual->total_qty : 0;
+            $actual[$ind]['weight'] = $sort_array[$count];
+            $count++;
         }
+
         return $actual;
+    }
+
+    public function sortArray($arr){
+        $newArr = [];
+        $arrlength = count($arr);
+
+        $ind = 0;
+        for($x = $arrlength; $x > 0; $x--) {
+            $newArr[$ind] = $arr[$x - 1];
+            $ind++;
+
+        }
+        return $newArr;
     }
 }
