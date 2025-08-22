@@ -31,7 +31,7 @@
                                 <tr>
                                     <th class="text-truncate">Periode</th>
                                     <th class="text-truncate">Year</th>
-                                    <th class="text-truncate">Actual WMA</th>
+                                    <th class="text-truncate">Product</th>
                                     <th class="text-truncate">Weighted Average</th>
                                     <th class="text-truncate">Action</th>
                                 </tr>
@@ -39,10 +39,10 @@
                                 <tbody>
                                 @foreach($data as $item)
                                     <tr>
-                                        <td>{{\App\Models\WeightedMovingAverage::periode($item['periode'])}}</td>
+                                        <td>{{$item->date}}</td>
                                         <td>{{$item->year}}</td>
-                                        <td>{{$item->actual_wma}}</td>
-                                        <td>{{$item->weighted_average}}</td>
+                                        <td>{{'('. $item->product_code .') - '.   $item->product->name}}</td>
+                                        <td>{{number_format($item->weighted_average)}}</td>
                                         <td><a href="{{route('admin.wma.weighted_moving_average.details', ['id'=>$item->id])}}"
                                                class="btn btn-success"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                     </tr>

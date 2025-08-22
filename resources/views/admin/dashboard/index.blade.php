@@ -111,10 +111,10 @@
             <div class="col-xl-4 col-md-6">
                 <div class="card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Items Per Transaction</h5>
+                        <h5 class="card-title m-0 me-2">Stock Per Items</h5>
                     </div>
                     <div class="card-body">
-                        @foreach($data_item_per_transaction as $item)
+                        @foreach($data_stock_per_item as $item)
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center mb-4">
                                     <div>
@@ -126,8 +126,8 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <h6 class="mb-1">{{$item['item_transaction']}}</h6>
-                                    <small class="text-muted">Sales</small>
+                                    <h6 class="mb-1">{{$item['qty_in'] - $item['qty_out']}}</h6>
+                                    <small class="text-muted">PCS</small>
                                 </div>
                             </div>
                         @endforeach
@@ -148,19 +148,17 @@
                                 <table class="table table-sm">
                                     <thead>
                                     <tr>
-                                        <th class="text-truncate">Periode</th>
-                                        <th class="text-truncate">Year</th>
-                                        <th class="text-truncate">Actual WMA</th>
+                                        <th class="text-truncate">Date</th>
+                                        <th class="text-truncate">Product</th>
                                         <th class="text-truncate">Weighted Average</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($data_wma as $item)
                                         <tr>
-                                            <td>{{\App\Models\WeightedMovingAverage::periode($item['periode'])}}</td>
-                                            <td class="text-truncate">{{$item['year']}}</td>
-                                            <td class="text-truncate">{{number_format($item['actual_wma'])}}</td>
-                                            <td>{{$item['weighted_average']}}</td>
+                                            <td>{{$item->date}}</td>
+                                            <td class="text-truncate">{{'('. $item->product_code .') - '.   $item->product->name}}</td>
+                                            <td>{{$item->weighted_average}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

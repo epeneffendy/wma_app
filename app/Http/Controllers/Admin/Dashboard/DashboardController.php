@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function index(ProductsService $productsService, ProductsTransactionService $productsTransactionService, WeightedMovingAverageService $weightedMovingAverageService)
     {
         $month_now = date('Y-m');
-        $month_now = '2025-01';
+//        $month_now = '2025-01';
         //total_product
         $data_product = $productsService->get();
 
@@ -33,6 +33,9 @@ class DashboardController extends Controller
         //Item Per Transaction
         $data_item_per_transaction = $productsTransactionService->itemPerTransaction($month_now);
 
+        //Stok Per Item
+        $data_stock_per_item = $productsTransactionService->stockPerItem();
+
         //WMA
         $data_wma = $weightedMovingAverageService->getByMonth($month_now);
 
@@ -42,6 +45,7 @@ class DashboardController extends Controller
             'data_sales_transaction' => $sales_transaction,
             'data_item_transaction' => count($data_item_transaction),
             'data_item_per_transaction' => $data_item_per_transaction,
+            'data_stock_per_item' => $data_stock_per_item,
             'data_wma' => $data_wma
         ]);
     }

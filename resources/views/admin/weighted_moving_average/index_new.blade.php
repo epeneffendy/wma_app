@@ -22,6 +22,18 @@
                     </div>
 
                     <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="periode">Product</label>
+                        <div class="col-sm-6">
+                            <select class="form-select" id="product" name="product" aria-label="Product">
+                                <option value="0">-- Select Product --</option>
+                                @foreach($list_products as $item)
+                                    <option value="{{$item->code}}">{{$item->code .' - '.$item->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="total_days">Total Days</label>
                         <div class="col-sm-2">
                             <input class="form-control" type="number" id="total_days" name="total_days"/>
@@ -67,10 +79,11 @@
                     "_token": "{{ csrf_token() }}",
                     'form': data,
                     'date_periode': $('#date_periode').val(),
-                    'total_days': $('#total_days').val()
+                    'total_days': $('#total_days').val(),
+                    'product': $('#product').val(),
                 }
             })
-            // redirect();
+            redirect();
         }
 
         function redirect() {

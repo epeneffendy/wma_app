@@ -53,12 +53,15 @@ class ProductsTransactionController extends Controller
             $route = '';
             $input = $productsTransactionRequest->validated();
             $product = $productsService->findById($input['product_code']);
+
             if (isset($product)) {
                 $input['unit_code'] = $product->unit_code;
                 $input['category_code'] = $product->category_code;
-                $input['price'] = $product->price;
-                $input['total_price'] = $product->price * $input['qty'];
+                $input['price'] = (int)$product->price;
+                $input['total_price'] = (double)$product->price * $input['qty'];
+
             }
+
             $transaction_id = $productsTransactionService->insert($input);
             if ($transaction_id) {
                 $data_transaction = $productsTransactionService->findById($transaction_id);

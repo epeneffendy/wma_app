@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\WeightedMovingAverage;
 use App\Models\WeightedMovingAverageDetail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WeightedMovingAverageService
@@ -66,27 +67,29 @@ class WeightedMovingAverageService
         return $actual;
     }
 
-    public function prosesWma($arr_data, $arr_filter)
+    public function prosesWma($arr_data, $arr_filter, $total_wma)
     {
+
         $message = '';
         $success = true;
-        $wma_id = $this->insertWma($arr_filter);
+        $wma_id = $this->insertWma($arr_filter, $total_wma);
+
         $total_weight = 0;
         $actual = 0;
         if ($wma_id) {
             foreach ($arr_data as $ind => $item) {
-                $total_actual = $item['actual'] * $item['weight'];
-                $total_weight += $item['weight'];
                 $arr_detail = [
                     'weighted_moving_average_id' => $wma_id,
-                    'year' => $item['year'],
-                    'periode' => $item['periode'],
+                    'year' => date('Y', strtotime($arr_filter['date_periode'])),
+                    'periode' => date('M', strtotime($arr_filter['date_periode'])),
+                    'date' => date('Y-m-d', strtotime($arr_filter['date_periode'])),
                     'actual_periode' => $item['actual'],
                     'weight' => $item['weight'],
-                    'total' => $total_actual
+                    'total' => $item['wma_item']
                 ];
+
                 $detail = WeightedMovingAverageDetail::insert($arr_detail);
-                $actual += $total_actual;
+
                 if (!$detail) {
                     $success = false;
                     $message = 'Add WMA Detail failed!';
@@ -95,15 +98,6 @@ class WeightedMovingAverageService
         } else {
             $success = false;
             $message = 'Add WMA failed!';
-        }
-
-        if ($success) {
-
-            $updateActual = $this->updateTotalActual($wma_id, $actual, $total_weight);
-            if (!$updateActual) {
-                $success = false;
-                $message = 'Update Actual failed!';
-            }
         }
 
         return ['success' => $success, 'message' => $message];
@@ -117,14 +111,17 @@ class WeightedMovingAverageService
         return $data;
     }
 
-    public function insertWma($payload)
+    public function insertWma($payload, $total_wma)
     {
-        $arr_data['periode'] = $payload['periode'];
-        $arr_data['year'] = $payload['year'];
-        $arr_data['number_of_month'] = $payload['total_month'];
+        $arr_data['periode'] = date('M', strtotime($payload['date_periode']));
+        $arr_data['year'] = date('Y', strtotime($payload['date_periode']));
+        $arr_data['date'] = $payload['date_periode'];
+        $arr_data['product_code'] = $payload['product'];
+        $arr_data['number_of_month'] = $payload['total_days'];
         $arr_data['actual_wma'] = 0;
-        $arr_data['weighted_average'] = 0;
-        $arr_data['created_by'] = 0;
+        $arr_data['weighted_average'] = $total_wma;
+        $arr_data['created_by'] = Auth::id();
+
         $wma = WeightedMovingAverage::insertGetId($arr_data);
         return $wma;
     }
@@ -169,7 +166,8 @@ class WeightedMovingAverageService
 
     public function getByMonth($month)
     {
-        $data = WeightedMovingAverage::where(DB::raw('DATE_FORMAT(updated_at,"%Y-%m")'), '=', $month)->get();
+        $data = WeightedMovingAverage::where(DB::raw('DATE_FORMAT(date,"%Y-%m")'), '=', $month)->get();
+
         return $data;
     }
 
@@ -217,6 +215,7 @@ class WeightedMovingAverageService
             $actual[$ind]['date'] = $arr_date[$item];
             $actual[$ind]['actual'] = ($data_actual->total_qty != null) ? $data_actual->total_qty : 0;
             $actual[$ind]['weight'] = $sort_array[$count];
+            $actual[$ind]['wma_item'] = (($data_actual->total_qty != null) ? $data_actual->total_qty : 0) * $sort_array[$count];
             $count++;
         }
 

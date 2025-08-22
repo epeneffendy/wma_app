@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\Models\ProductsTransaction;
+use App\Models\WarehouseTransaction;
 use Illuminate\Support\Facades\DB;
 
 class ProductsTransactionService
@@ -25,6 +26,7 @@ class ProductsTransactionService
         $payload['transaction_date'] = date('Y-m-d H:i:s');
         $payload['created_at'] = date('Y-m-d H:i:s');
         $payload['updated_at'] = date('Y-m-d H:i:s');
+
         $data = ProductsTransaction::insertGetId($payload);
         return $data;
     }
@@ -57,5 +59,26 @@ class ProductsTransactionService
             ->where(['transaction_type' => 'out'])
             ->groupBy(['products.name', 'category.name'])->get();
         return $data;
+    }
+
+    public function stockPerItem(){
+        $data = WarehouseTransaction::select(['product_code','products.name','qty_in','qty_out', 'category.name'])
+            ->leftJoin('products','products.code','=','warehouse_transaction.product_code')
+            ->leftJoin('category','category.code','=','products.category_code')
+            ->groupBy(['warehouse_transaction.product_code','warehouse_transaction.qty_in','warehouse_transaction.qty_out', 'category.name'])->get();
+
+        $arr_item = [];
+        $total_in = $total_out = 0;
+        foreach ($data as $item){
+            $total_in += $item->qty_in;
+            $total_out += $item->qty_out;
+            $arr_item[$item->product_code]['product_code'] = $item->product_code;
+            $arr_item[$item->product_code]['product_name'] = $item->product->name;
+            $arr_item[$item->product_code]['category_name'] = $item->name;
+            $arr_item[$item->product_code]['qty_in'] = $total_in;
+            $arr_item[$item->product_code]['qty_out'] = $total_out;
+        }
+
+        return $arr_item;
     }
 }

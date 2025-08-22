@@ -49,7 +49,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label" for="basic-default-company">Transaction Date</label>
                                 <div class="col-sm-3">
-                                    <input class="form-control"  type="text" id="transaction_date" name="transaction_date" value="{{date('d-m-Y')}}" disabled/>
+                                    <input class="form-control"  type="text" id="transaction_date" name="transaction_date" value="{{date('Y-m-d H:i:s')}}" />
                                 </div>
                             </div>
 

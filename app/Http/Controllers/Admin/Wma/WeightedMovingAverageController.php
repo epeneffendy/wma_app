@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin\Wma;
 
 use App\Http\Controllers\Controller;
 use App\Models\WeightedMovingAverage;
+use App\Services\ProductsService;
 use App\Services\WeightedMovingAverageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WeightedMovingAverageController extends Controller
 {
-    public function index(WeightedMovingAverageService $weightedMovingAverageService)
+    public function index(WeightedMovingAverageService $weightedMovingAverageService, ProductsService $productsService)
     {
         $periode = $weightedMovingAverageService->periode();
         $year_now = date('Y');
@@ -18,10 +19,11 @@ class WeightedMovingAverageController extends Controller
         for ($i = 3; $i >= 0; --$i) {
             $year[$i] = $year_now - $i;
         }
-        return view('admin.weighted_moving_average.index', ['periode' => $periode, 'year' => $year]);
+
+        return view('admin.weighted_moving_average.index', ['periode' => $periode, 'year' => $year, 'list_products' => $list_products]);
     }
 
-    public function index_new(WeightedMovingAverageService $weightedMovingAverageService)
+    public function index_new(WeightedMovingAverageService $weightedMovingAverageService, ProductsService $productsService)
     {
         $periode = $weightedMovingAverageService->periode();
         $year_now = date('Y');
@@ -29,7 +31,8 @@ class WeightedMovingAverageController extends Controller
         for ($i = 3; $i >= 0; --$i) {
             $year[$i] = $year_now - $i;
         }
-        return view('admin.weighted_moving_average.index_new', ['periode' => $periode, 'year' => $year]);
+        $list_products = $productsService->get();
+        return view('admin.weighted_moving_average.index_new', ['periode' => $periode, 'year' => $year,'list_products'=>$list_products]);
     }
 
     public function calculateWma(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
@@ -69,7 +72,7 @@ class WeightedMovingAverageController extends Controller
             if ($prosesWma['success']) {
 
                 DB::commit();
-                return ['success'=>$prosesWma['success'],'message'=>$prosesWma['message']];
+                return ['success' => $prosesWma['success'], 'message' => $prosesWma['message']];
             } else {
                 dd("failed");
                 DB::rollBack();
@@ -91,25 +94,27 @@ class WeightedMovingAverageController extends Controller
 
         try {
             $arr_filter = [
+                'date_periode' => $request->date_periode,
                 'total_days' => $request->total_days,
-                'date_periode' => $request->date_periode
+                'product' => $request->product,
             ];
+
+            $date_periode = $request->date_periode;
+            $total_days = $request->total_days;
+            $count_days = $weightedMovingAverageService->countDays($request->all());
+            $search_actual = $weightedMovingAverageService->searchActualStock($date_periode, $total_days, $count_days);
 
             $form = $request->all()['form'];
 
-            $arr_data = [];
-            for ($i = 0; $i < $request->count; $i++) {
-                $arr_data[$i]['year'] = $form['year_' . $i];
-                $arr_data[$i]['periode'] = $form['periode_' . $i];
-                $arr_data[$i]['actual'] = $form['actual_' . $i];
-                $arr_data[$i]['weight'] = $form['weight_' . $i];
+            $total_wma = 0;
+            foreach ($search_actual as $item){
+                $total_wma += $item['wma_item'];
             }
 
-            $prosesWma = $weightedMovingAverageService->prosesWma($arr_data, $arr_filter);
+            $prosesWma = $weightedMovingAverageService->prosesWma($search_actual, $arr_filter, $total_wma);
             if ($prosesWma['success']) {
-
                 DB::commit();
-                return ['success'=>$prosesWma['success'],'message'=>$prosesWma['message']];
+                return ['success' => $prosesWma['success'], 'message' => $prosesWma['message']];
             } else {
                 dd("failed");
                 DB::rollBack();
@@ -131,21 +136,23 @@ class WeightedMovingAverageController extends Controller
         return view('admin.weighted_moving_average.list', ['data' => $data]);
     }
 
-    public function details(Request $request, WeightedMovingAverageService $weightedMovingAverageService){
+    public function details(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
+    {
         $data = $weightedMovingAverageService->getById($request->id);
         $details = $weightedMovingAverageService->getDetails($request->id);
-        return view('admin.weighted_moving_average.details', ['data' => $data,'details'=>$details]);
+        return view('admin.weighted_moving_average.details', ['data' => $data, 'details' => $details]);
     }
 
-    public function calculateWmaNew(Request $request, WeightedMovingAverageService $weightedMovingAverageService){
+    public function calculateWmaNew(Request $request, WeightedMovingAverageService $weightedMovingAverageService)
+    {
         $date_periode = $request->date_periode;
         $total_days = $request->total_days;
-        $count_days= $weightedMovingAverageService->countDays($request->all());
+        $count_days = $weightedMovingAverageService->countDays($request->all());
         $search_actual = $weightedMovingAverageService->searchActualStock($date_periode, $total_days, $count_days);
 
         return view('admin.weighted_moving_average.partial.show_calculate_wma_new', [
             'total_days' => $count_days,
-            'actual'=>$search_actual
+            'actual' => $search_actual
         ]);
     }
 }
