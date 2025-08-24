@@ -41,6 +41,12 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::post('/store', [ProductsTransactionController::class, 'store'])->name('store');
                 Route::get('/edit/{id}', [ProductsTransactionController::class, 'edit'])->name('edit');
             });
+
+            Route::prefix('product_retur')->namespace('Product Retur')->name('product_retur.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'index'])->name('index');
+                Route::get('/add', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'add'])->name('add');
+                Route::post('/store', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'store'])->name('store');
+            });
         });
 
         Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.', 'namespace' => 'Warehouse'], function () {
