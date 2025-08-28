@@ -18,7 +18,7 @@ class ProductReturService{
         $payload['category_code'] = $product->category_code;
         $payload['unit_code'] = $product->unit_code;
         $payload['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
-        $payload['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');;
+        $payload['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
         unset($payload['transaction_date']);
         unset($payload['_token']);
         unset($payload['editable']);
@@ -26,5 +26,10 @@ class ProductReturService{
         $insert = ProductRetur::insert($payload);
         return $insert;
 
+    }
+
+    public function approve($id){
+        $data = ProductRetur::where(['id'=>$id])->update(['status'=>1]);
+        return $data;
     }
 }

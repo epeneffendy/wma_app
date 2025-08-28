@@ -44,4 +44,23 @@ class ProductReturController extends Controller
             return back()->with('errors', $e->getMessage());
         }
     }
+
+    public function approve(Request $request, ProductReturService $productReturService){
+        DB::beginTransaction();
+        try {
+            $approve = $productReturService->approve($request->id);
+            if($approve){
+                DB::commit();
+                $message = 'Retur successfully approved!';
+            }else{
+                $message = 'Retur failed to approved!';
+                DB::rollBack();
+            }
+            return redirect()->route('admin.transaction.product_retur.index')->with('message', $message);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return back()->with('errors', $e->getMessage());
+        }
+
+    }
 }

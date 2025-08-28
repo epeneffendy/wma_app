@@ -38,17 +38,32 @@
                                     <th class="text-truncate">Date</th>
                                     <th class="text-truncate">Qty</th>
                                     <th class="text-truncate">Description</th>
+                                    <th class="text-truncate">Status</th>
+                                    <th class="text-truncate">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($data as $item)
                                     <tr>
                                         <td>{{$item->product->code .' - '. $item->product->name}}</td>
-                                        <td>{{$item->unit->name}}</td>
+                                        <td>{{$item->unit->code}}</td>
                                         <td>{{$item->category->name}}</td>
                                         <td>{{$item->created_at}}</td>
                                         <td>{{$item->qty}}</td>
                                         <td>{{$item->description}}</td>
+                                        <td>
+                                            @if($item->status == 0)
+                                                <span class="badge bg-warning">Waiting Approve</span>
+                                            @else
+                                                <span class="badge bg-success">Approved</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($item->status == 0)
+                                            <a href="{{route('admin.transaction.product_retur.approve', ['id'=>$item->id])}}"
+                                               class="btn btn-info">Approve</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

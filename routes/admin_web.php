@@ -46,6 +46,7 @@ Route::prefix('administrator')->name('admin.')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'index'])->name('index');
                 Route::get('/add', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'add'])->name('add');
                 Route::post('/store', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'store'])->name('store');
+                Route::get('/approve/{id}', [\App\Http\Controllers\Admin\Transaction\ProductReturController::class, 'approve'])->name('approve');
             });
         });
 
